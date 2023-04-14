@@ -81,57 +81,15 @@ namespace TTT
             Content = gr;
             
         }
+
         private void Reglid_Clicked(object sender, EventArgs e)
         {
             Reglid();
         }
-
-        //private void Uus_mang_Clicked(object sender, EventArgs e)
-        //{
-        //    Uus_mang();
-        //}
         public void Reglid()
         {
             DisplayAlert("Reeglid", "Mängijad panevad kordamööda väljaku vabadele lahtritele 3×3 märke (üks on alati ristid, teine ​​nullid). Võidab see, kes esimesena reastab 3 oma tükki vertikaalselt, horisontaalselt või suurel diagonaalil. " , "Jah!");
         }
-        //public async void Uus_mang()
-        //{
-        //    bool uus = await DisplayAlert("Uus mäng", "Kas tahad uus mäng?", "Jah!", "Ei!");
-        //    if (uus)
-        //    {
-        //        Tulemused = new int[3, 3];
-        //        tulemus = -1;
-        //        ngr = new Grid
-        //        {
-                    
-        //            RowDefinitions =
-        //        {
-
-        //            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-        //            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-        //            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
-        //        },
-        //            ColumnDefinitions =
-        //        {
-        //           new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-        //           new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-        //           new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-
-        //        }
-        //        };
-        //        for (int i = 0; i < 3; i++)
-        //        {
-        //            for (int j = 0; j < 3; j++)
-        //            {
-        //                b = new Image();
-        //                ngr.Children.Add(b, j, i);
-        //                TapGestureRecognizer tap = new TapGestureRecognizer();
-        //                tap.Tapped += Tap_Tapped;
-        //                b.GestureRecognizers.Add(tap);
-        //            }
-        //        }
-        //    }
-        //}
         public int Kontroll()
         {
             //esimene inimene
