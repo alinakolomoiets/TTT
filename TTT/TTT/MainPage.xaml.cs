@@ -15,7 +15,7 @@ namespace TTT
     {
          Grid gr , ngr;
         readonly Label lbl;
-        readonly Image b;
+        Image b;
         Button uus_mang, reglid;
         public bool esimene;
         int tulemus = -1;
@@ -30,20 +30,37 @@ namespace TTT
             };
             gr = new Grid
             {
+
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 BackgroundColor = Color.LightGreen,
                 RowDefinitions =
                 {
 
-                    new RowDefinition { Height = new GridLength(2, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
                     new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
                 },
                 ColumnDefinitions =
                 {
 
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
                     new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
                 },
             };
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    b=new Image();
+                    gr.Children.Add(b,j, i);
+                    TapGestureRecognizer tap = new TapGestureRecognizer();
+                    tap.Tapped += Tap_Tapped;
+                    b.GestureRecognizers.Add(tap);
+                }
+            }
+           // gr.Children.Add(gr, 0, 0);
+
             Reglid();
             reglid = new Button()
             {
@@ -52,85 +69,69 @@ namespace TTT
             };
             reglid.Clicked += Reglid_Clicked;
             Content = gr;
-            gr.Children.Add(reglid, 0, 1);
+            gr.Children.Add(reglid, 0, 4);
 
-            Uus_mang();
+            //Uus_mang();
             uus_mang = new Button()
             {
                 Text = "Uus mäng"
             };
-            gr.Children.Add(uus_mang, 0, 1);
-            uus_mang.Clicked += Uus_mang_Clicked;
+            gr.Children.Add(uus_mang, 0, 3);
+            //uus_mang.Clicked += Uus_mang_Clicked;
             Content = gr;
+            
         }
         private void Reglid_Clicked(object sender, EventArgs e)
         {
             Reglid();
         }
 
-        private void Uus_mang_Clicked(object sender, EventArgs e)
-        {
-            Uus_mang();
-        }
-        public async void Kes_on_esimene()
-        {
-            string esimene_valik = await DisplayPromptAsync("Kes on esimene?", "Tee valiku X-1 või 0-2", initialValue: "1", maxLength: 1, keyboard: Keyboard.Numeric);
-            if (esimene_valik == "1")
-            {
-                esimene = true;
-            }
-            else
-            {
-                esimene = false;
-            }
-        }
-
-
+        //private void Uus_mang_Clicked(object sender, EventArgs e)
+        //{
+        //    Uus_mang();
+        //}
         public void Reglid()
         {
-            DisplayAlert("Reeglid", "1) Valige üks ruut ja tehke oma käik , vastase järgmine käik  " +
-                "2) Ära sega rivaali", "Jah!");
+            DisplayAlert("Reeglid", "Mängijad panevad kordamööda väljaku vabadele lahtritele 3×3 märke (üks on alati ristid, teine ​​nullid). Võidab see, kes esimesena reastab 3 oma tükki vertikaalselt, horisontaalselt või suurel diagonaalil. " , "Jah!");
         }
-        public async void Uus_mang()
-        {
-            bool uus = await DisplayAlert("Uus mäng", "Kas tahad uus mäng?", "Jah!", "Ei!");
-            if (uus)
-            {
-                Kes_on_esimene();
-                Tulemused = new int[3, 3];
-                tulemus = -1;
-                ngr = new Grid
-                {
-                    BackgroundColor = Color.Red,
-                    RowDefinitions =
-                {
+        //public async void Uus_mang()
+        //{
+        //    bool uus = await DisplayAlert("Uus mäng", "Kas tahad uus mäng?", "Jah!", "Ei!");
+        //    if (uus)
+        //    {
+        //        Tulemused = new int[3, 3];
+        //        tulemus = -1;
+        //        ngr = new Grid
+        //        {
+                    
+        //            RowDefinitions =
+        //        {
 
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
-                },
-                    ColumnDefinitions =
-                {
-                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+        //            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+        //            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+        //            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
+        //        },
+        //            ColumnDefinitions =
+        //        {
+        //           new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+        //           new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+        //           new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
 
-                }
-                };
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        ngr.Children.Add(b, j, i);
-                        TapGestureRecognizer tap = new TapGestureRecognizer();
-                        tap.Tapped += Tap_Tapped;
-                        b.GestureRecognizers.Add(tap);
-                    }
-                }
-                gr.Children.Add(ngr, 0, 0);
-            }
-
-        }
+        //        }
+        //        };
+        //        for (int i = 0; i < 3; i++)
+        //        {
+        //            for (int j = 0; j < 3; j++)
+        //            {
+        //                b = new Image();
+        //                ngr.Children.Add(b, j, i);
+        //                TapGestureRecognizer tap = new TapGestureRecognizer();
+        //                tap.Tapped += Tap_Tapped;
+        //                b.GestureRecognizers.Add(tap);
+        //            }
+        //        }
+        //    }
+        //}
         public int Kontroll()
         {
             //esimene inimene
@@ -192,19 +193,18 @@ namespace TTT
             var c = Grid.GetColumn(b);
             if (esimene == true)
             {
-                b = new Image { Source = "x.png" };
+                b.Source = ImageSource.FromFile("x.png");
                 esimene = false;
                 Tulemused[r, c] = 1;
             }
             else
             {
-                b = new Image { Source = "o.png" };
+                b.Source =ImageSource.FromFile("o.png");
                 esimene = true;
                 Tulemused[r, c] = 2;
             }
-            ngr.Children.Add(b, c, r);
+            gr.Children.Add(b, c, r);
             Lopp();
-
         }
     }
 }
