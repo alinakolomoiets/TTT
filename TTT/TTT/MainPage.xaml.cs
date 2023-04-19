@@ -32,7 +32,7 @@ namespace TTT
             {
 
                 VerticalOptions = LayoutOptions.FillAndExpand,
-                BackgroundColor = Color.LightGreen,
+                BackgroundColor = Color.White,
                 RowDefinitions =
                 {
 
@@ -71,17 +71,71 @@ namespace TTT
             Content = gr;
             gr.Children.Add(reglid, 0, 4);
 
-            //Uus_mang();
+            Uus_mang();
             uus_mang = new Button()
             {
                 Text = "Uus mäng"
             };
             gr.Children.Add(uus_mang, 0, 3);
-            //uus_mang.Clicked += Uus_mang_Clicked;
+            uus_mang.Clicked += Uus_mang_Clicked;
             Content = gr;
             
         }
+        private void Uus_mang_Clicked(object sender, EventArgs e)
+        {
+            Uus_mang();
+        }
+        public async void Kes_on_esimene()
+        {
+            string esimene_valik = await DisplayPromptAsync("Kes on esimene?", "Tee valiku X-1 või 0-2", initialValue: "1", maxLength: 1, keyboard: Keyboard.Numeric);
+            if (esimene_valik == "1")
+            {
+                esimene = true;
+            }
+            else
+            {
+                esimene = false;
+            }
+        }
+        public async void Uus_mang()
+        {
+            bool uus = await DisplayAlert("Uus mäng", "Kas tahad uus mäng?", "Jah!", "Ei!");
+            if (uus)
+            {
+                Kes_on_esimene();
+                Tulemused = new int[3, 3];
+                tulemus = -1;
+                ngr = new Grid
+                {
+                    RowDefinitions =
+                {
 
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
+                },
+                    ColumnDefinitions =
+                {
+                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
+                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
+
+                }
+                };
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        ngr.Children.Add(b, j, i);
+                        TapGestureRecognizer tap = new TapGestureRecognizer();
+                        tap.Tapped += Tap_Tapped;
+                        b.GestureRecognizers.Add(tap);
+                    }
+                }
+                //gr.Children.Add(ngr, 0, 0);
+            }
+
+        }
         private void Reglid_Clicked(object sender, EventArgs e)
         {
             Reglid();
