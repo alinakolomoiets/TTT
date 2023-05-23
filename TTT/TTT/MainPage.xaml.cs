@@ -146,23 +146,23 @@ namespace TTT
             {
                 if (Tulemused[i, 0] != 0 && Tulemused[i, 0] == Tulemused[i, 1] && Tulemused[i, 1] == Tulemused[i, 2])
                 {
-                    winner = Tulemused[i, 0]; // If a winning combination is found in a row, assign that value to 'winner'
-                    break; // Stop checking for other winning combinations since a winner has already been found
+                    winner = Tulemused[i, 0];
+                    break; 
                 }
                 if (Tulemused[0, i] != 0 && Tulemused[0, i] == Tulemused[1, i] && Tulemused[1, i] == Tulemused[2, i])
                 {
-                    winner = Tulemused[0, i]; // If a winning combination is found in a column, assign that value to 'winner'
-                    break; // Stop checking for other winning combinations since a winner has already been found
+                    winner = Tulemused[0, i];
+                    break;
                 }
             }
 
             // Checking diagonal winning combinations
             if (Tulemused[0, 0] != 0 && Tulemused[0, 0] == Tulemused[1, 1] && Tulemused[1, 1] == Tulemused[2, 2])
-                winner = Tulemused[0, 0]; // If a diagonal winning combination is found in upper left to lower right direction, assign that value to 'winner'
+                winner = Tulemused[0, 0];
             if (Tulemused[2, 0] != 0 && Tulemused[2, 0] == Tulemused[1, 1] && Tulemused[1, 1] == Tulemused[0, 2])
-                winner = Tulemused[2, 0]; // If a diagonal winning combination is found in lower left to upper right direction, assign that value to 'winner'
+                winner = Tulemused[2, 0]; 
 
-            // Return the winner (0 if there is no winner yet)
+          
             return winner;
         }
         public void Lopp()
