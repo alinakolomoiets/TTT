@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace TTT
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
-         Grid gr , ngr;
+        Grid gr , ngr;
         readonly Label lbl;
         Image b;
         Button uus_mang, reglid;
@@ -69,7 +70,7 @@ namespace TTT
             };
             reglid.Clicked += Reglid_Clicked;
             Content = gr;
-            gr.Children.Add(reglid, 0, 4);
+            gr.Children.Add(reglid, 0, 3);
 
             Uus_mang();
             uus_mang = new Button()
@@ -99,42 +100,35 @@ namespace TTT
         }
         public async void Uus_mang()
         {
-            bool uus = await DisplayAlert("Uus mäng", "Kas tahad uus mäng?", "Jah!", "Ei!");
-            if (uus)
+            Kes_on_esimene();
+            gr.Children.Clear(); // очищаем сетку от всех кнопок и изображений
+            Tulemused = new int[3, 3]; // обнуляем массив результатов
+            for (int i = 0; i < 3; i++)
             {
-                Kes_on_esimene();
-                Tulemused = new int[3, 3];
-                tulemus = -1;
-                ngr = new Grid
+                for (int j = 0; j < 3; j++)
                 {
-                    RowDefinitions =
-                {
-
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
-                },
-                    ColumnDefinitions =
-                {
-                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) },
-                   new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) }
-
+                    uus_mang = new Button();
+                    reglid = new Button();
+                    b = new Image();
+                    gr.Children.Add(b, j, i); // добавляем новую кнопку в сетку
+                    TapGestureRecognizer tap = new TapGestureRecognizer();
+                    tap.Tapped += Tap_Tapped;
+                    b.GestureRecognizers.Add(tap);
                 }
-                };
-                for (int i = 0; i < 3; i++)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        ngr.Children.Add(b, j, i);
-                        TapGestureRecognizer tap = new TapGestureRecognizer();
-                        tap.Tapped += Tap_Tapped;
-                        b.GestureRecognizers.Add(tap);
-                    }
-                }
-                //gr.Children.Add(ngr, 0, 0);
             }
+            uus_mang = new Button()
+            {
+                Text = "Uus mäng"
+            };
+            gr.Children.Add(uus_mang, 0, 3);
+            uus_mang.Clicked += Uus_mang_Clicked;
 
+            reglid = new Button()
+            {
+                Text = "Reglid"
+            };
+            gr.Children.Add(reglid, 1, 3);
+            reglid.Clicked += Reglid_Clicked;
         }
         private void Reglid_Clicked(object sender, EventArgs e)
         {
@@ -146,41 +140,30 @@ namespace TTT
         }
         public int Kontroll()
         {
-            //esimene inimene
-            if (Tulemused[0, 0] == 1 && Tulemused[1, 0] == 1 && Tulemused[2, 0] == 1 || Tulemused[0, 1] == 1 && Tulemused[1, 1] == 1 && Tulemused[2, 1] == 1 || Tulemused[0, 2] == 1 && Tulemused[1, 2] == 1 && Tulemused[2, 2] == 1)
+            int winner = 0;
+            // Checking all possible winning combinations in rows and columns
+            for (int i = 0; i < 3; i++)
             {
-                tulemus = 1;
+                if (Tulemused[i, 0] != 0 && Tulemused[i, 0] == Tulemused[i, 1] && Tulemused[i, 1] == Tulemused[i, 2])
+                {
+                    winner = Tulemused[i, 0]; // If a winning combination is found in a row, assign that value to 'winner'
+                    break; // Stop checking for other winning combinations since a winner has already been found
+                }
+                if (Tulemused[0, i] != 0 && Tulemused[0, i] == Tulemused[1, i] && Tulemused[1, i] == Tulemused[2, i])
+                {
+                    winner = Tulemused[0, i]; // If a winning combination is found in a column, assign that value to 'winner'
+                    break; // Stop checking for other winning combinations since a winner has already been found
+                }
             }
-            else if (Tulemused[0, 0] == 1 && Tulemused[0, 1] == 1 && Tulemused[0, 2] == 1 || Tulemused[1, 0] == 1 && Tulemused[1, 1] == 1 && Tulemused[1, 2] == 1 || Tulemused[2, 0] == 1 && Tulemused[2, 1] == 1 && Tulemused[2, 2] == 1)
-            {
-                tulemus = 1;
-            }
-            else if (Tulemused[0, 0] == 1 && Tulemused[1, 1] == 1 && Tulemused[2, 2] == 1 || Tulemused[0, 2] == 1 && Tulemused[1, 1] == 1 && Tulemused[2, 0] == 1)
-            {
-                tulemus = 1;
-            }
-            //teine inimene
-            else if (Tulemused[0, 0] == 2 && Tulemused[1, 0] == 2 && Tulemused[2, 0] == 2 || Tulemused[0, 1] == 2 && Tulemused[1, 1] == 2 && Tulemused[2, 1] == 2 || Tulemused[0, 2] == 2 && Tulemused[1, 2] == 2 && Tulemused[2, 2] == 2)
-            {
-                tulemus = 2;
-            }
-            else if (Tulemused[0, 0] == 2 && Tulemused[0, 1] == 2 && Tulemused[0, 2] == 2 || Tulemused[1, 0] == 2 && Tulemused[1, 1] == 2 && Tulemused[1, 2] == 2 || Tulemused[2, 0] == 2 && Tulemused[2, 1] == 2 && Tulemused[2, 2] == 2)
-            {
-                tulemus = 2;
-            }
-            else if (Tulemused[0, 0] == 2 && Tulemused[1, 1] == 2 && Tulemused[2, 2] == 2 || Tulemused[0, 2] == 2 && Tulemused[1, 1] == 2 && Tulemused[2, 0] == 2)
-            {
-                tulemus = 2;
-            }
-            else if (Tulemused[0, 0] == 1)
-            {
-                tulemus = 3;
-            }
-            else
-            {
-                tulemus = -1;
-            }
-            return tulemus;
+
+            // Checking diagonal winning combinations
+            if (Tulemused[0, 0] != 0 && Tulemused[0, 0] == Tulemused[1, 1] && Tulemused[1, 1] == Tulemused[2, 2])
+                winner = Tulemused[0, 0]; // If a diagonal winning combination is found in upper left to lower right direction, assign that value to 'winner'
+            if (Tulemused[2, 0] != 0 && Tulemused[2, 0] == Tulemused[1, 1] && Tulemused[1, 1] == Tulemused[0, 2])
+                winner = Tulemused[2, 0]; // If a diagonal winning combination is found in lower left to upper right direction, assign that value to 'winner'
+
+            // Return the winner (0 if there is no winner yet)
+            return winner;
         }
         public void Lopp()
         {
@@ -197,6 +180,24 @@ namespace TTT
             {
                 DisplayAlert("Ei keegi ei on võit", "Hea mäng sõprad", "Ok");
             }
+            else if (Täidetud())
+            {
+                DisplayAlert("Viik", "Mäng lõppes viigiga", "Ok");
+            }
+        }
+        public bool Täidetud()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (Tulemused[i, j] == 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
         private void Tap_Tapped(object sender, EventArgs e)
         {
